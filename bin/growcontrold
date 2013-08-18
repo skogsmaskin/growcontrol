@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+require_relative '../config/environment'
+
+Forever.run do
+
+  before :all do
+    LOGGER.info("Opening #{VIDEO_DEVICE}")
+    @webcam = GrowControl::WebCam.new(VIDEO_DEVICE)
+    @temperature = GrowControl::Temperature.new
+    @humidity = GrowControl::Humidity.new
+  end
+
+  on_error do |e|
+    Mail.deliver do
+      delivery_method :sendmail, :location => `which sendmail`.chomp
+      to      "per.kristian.nordnes@gmail.com"
+      from    "Raspberry Pi <per.kristian.nordnes@gmail.com>"
+      subject "[GrowControl Watcher] #{e.message}"
+      body    "%s\n  %s" % [e.message, e.backtrace.join("\n  ")]
+    end
+  end
+
+  every 10.minutes do
+    @temperature.write_graph(:week, TEMP_WEEKLY_GRAPH_FILE)
+    @temperature.write_graph(:day, TEMP_DAILY_GRAPH_FILE)
+    @humidity.write_graph(:week, HUM_WEEKLY_GRAPH_FILE)
+    @humidity.write_graph(:day, HUM_DAILY_GRAPH_FILE)
+    LOGGER.info("Wrote graphs")
+  end
+
+  every 60.seconds do
+    temp = @temperature.log
+    LOGGER.info "Logged temperature #{temp}"
+    hum = @humidity.log
+    LOGGER.info "Logged humidity #{hum}"
+  end
+
+
+  every 5.minutes do
+    @webcam.save(IMAGE_TEMP_FILE, IMAGE_DESTINATION_FILE)
+    LOGGER.info "Camera image saved"
+  end
+
+  after :all do
+    LOGGER.info "Closing #{VIDEO_DEVICE}"
+    @webcam.close
+  end
+
+end

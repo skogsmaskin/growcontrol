@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require_relative '../config/environment'
+
+DB.create_table :temperatures do
+  primary_key :id
+  Float :value
+  DateTime :time
+end
+
+DB.create_table :humidities do
+  primary_key :id
+  Float :value
+  DateTime :time
+end
