@@ -12,7 +12,6 @@ module GrowControl
     def initialize(video_device)
       @video_device = video_device
       @input = V4L2Input.new @video_device
-      `rm /tmp/hornetseye-ruby2.0.0-pi/lock`
     end
 
     def save(temporary_file_name, destination_file_name)

@@ -1,9 +1,4 @@
-require 'hornetseye_v4l2'
-require 'hornetseye_rmagick'
-include Hornetseye
-input = V4L2Input.new '/dev/video0'
-input.read_usintrgb.save_ubytergb('./tmp/test.jpg')
-
+# GrowControl
 
 
 ## Requirements

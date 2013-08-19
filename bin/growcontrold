@@ -1,27 +1,26 @@
 #!/usr/bin/env ruby
 
+`rm /tmp/hornetseye-ruby2.0.0-pi/lock`
+
 require 'rubygems' unless defined?(Gem)
 require 'forever'
 require 'mail'
 require 'logger'
+require_relative '../lib/growcontrol'
 
 Forever.run :fork => true do
 
   before :all do
     require_relative '../config/environment'
-    LOGGER.info("Opening #{VIDEO_DEVICE}")
+    LOGGER.info "Starting"
     @temperature = GrowControl::Temperature.new
     @humidity = GrowControl::Humidity.new
+    @temperature_warned_at = nil
+    @humidity_warned_at = nil
   end
 
   on_error do |e|
-    Mail.deliver do
-      delivery_method :sendmail, :location => `which sendmail`.chomp
-      to      "per.kristian.nordnes@gmail.com"
-      from    "Raspberry Pi <per.kristian.nordnes@gmail.com>"
-      subject "[GrowControl Watcher] #{e.message}"
-      body    "%s\n  %s" % [e.message, e.backtrace.join("\n  ")]
-    end
+    GrowControl::Notification.warn_about_exception(e)
   end
 
   every 10.minutes do
@@ -37,8 +36,19 @@ Forever.run :fork => true do
     LOGGER.info "Logged temperature #{temp}"
     hum = @humidity.log
     LOGGER.info "Logged humidity #{hum}"
+    if (temp[:value] > TEMPERATURE_UPPER_LIMIT or temp[:value] < TEMPERATURE_LOWER_LIMIT) and !@temperature_warned_at
+      GrowControl::Notification.warn_about_temperature(temp[:value])
+      @temperature_warned_at = Time.now
+      LOGGER.warn("Warned about temperature (#{temp[:value]})")
+    end
+    if (hum[:value] > HUMIDITY_UPPER_LIMIT or hum[:value] < HUMIDITY_LOWER_LIMIT) and !@humidity_warned_at
+      GrowControl::Notification.warn_about_humidity(hum[:value]) 
+      @humidity_warned_at = Time.now
+      LOGGER.warn("Warned about humidity (#{hum[:value]})")
+    end
+    @temperature_warned_at = nil if @temperature_warned_at and (Time.now-3600) > @temperature_warned_at
+    @humidity_warned_at = nil if @humidity_warned_at and (Time.now-3600) > @humidity_warned_at
   end
-
 
   every 5.minutes do
     @webcam = GrowControl::WebCam.new(VIDEO_DEVICE)
@@ -48,7 +58,7 @@ Forever.run :fork => true do
   end
 
   after :all do
-    LOGGER.info "Closing #{VIDEO_DEVICE}"
+    LOGGER.info "Exiting"
   end
 
 end

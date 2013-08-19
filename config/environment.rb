@@ -5,7 +5,6 @@ require 'logger'
 require 'sequel'
 require 'sqlite3'
 require 'gruff'
-require_relative '../lib/growcontrol'
 
 LOGGER = Logger.new(STDOUT)
 LOGGER.level = Logger::INFO
@@ -20,3 +19,9 @@ HUM_WEEKLY_GRAPH_FILE = './public/hum_week.png'
 HUM_DAILY_GRAPH_FILE = './public/hum_daily.png'
 
 DB = Sequel.sqlite("./db/GrowControl.db")
+
+TEMPERATURE_UPPER_LIMIT = 33
+TEMPERATURE_LOWER_LIMIT = 16
+
+HUMIDITY_UPPER_LIMIT = 60
+HUMIDITY_LOWER_LIMIT = 30
