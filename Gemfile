@@ -1,7 +1,7 @@
 source 'https://rubygems.org/'
 
 gem 'mail'
-gem 'foreverb'
+gem 'foreverb', :git => "https://github.com/DAddYE/foreverb"
 gem 'tellstickr'
 gem 'hornetseye-v4l2'
 gem 'hornetseye-rmagick'
