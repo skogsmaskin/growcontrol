@@ -1,11 +1,15 @@
 #!/usr/bin/env ruby
-require_relative '../config/environment'
 
-Forever.run do
+require 'rubygems' unless defined?(Gem)
+require 'forever'
+require 'mail'
+require 'logger'
+
+Forever.run :fork => true do
 
   before :all do
+    require_relative '../config/environment'
     LOGGER.info("Opening #{VIDEO_DEVICE}")
-    @webcam = GrowControl::WebCam.new(VIDEO_DEVICE)
     @temperature = GrowControl::Temperature.new
     @humidity = GrowControl::Humidity.new
   end
@@ -37,13 +41,14 @@ Forever.run do
 
 
   every 5.minutes do
+    @webcam = GrowControl::WebCam.new(VIDEO_DEVICE)
     @webcam.save(IMAGE_TEMP_FILE, IMAGE_DESTINATION_FILE)
+    @webcam.close
     LOGGER.info "Camera image saved"
   end
 
   after :all do
     LOGGER.info "Closing #{VIDEO_DEVICE}"
-    @webcam.close
   end
 
 end
