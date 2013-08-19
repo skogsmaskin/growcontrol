@@ -1,0 +1,33 @@
+### BEGIN INIT INFO
+# Provides:          growcontrold
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: growcontrold initscript
+# Description:       growcontrold
+### END INIT INFO
+
+# Do NOT "set -e"
+
+DAEMON="growcontrold"
+USER="pi"
+SCRIPT_NAME="/etc/init.d/growcontrol"
+
+case "$1" in
+  start)
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON start"
+  ;;
+  stop)
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON stop"
+  ;;
+  restart)
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON restart"
+  ;;
+  *)
+  echo "Usage: $SCRIPT_NAME {start|stop|restart}" >&2
+  exit 3
+  ;;
+esac
+
+:
