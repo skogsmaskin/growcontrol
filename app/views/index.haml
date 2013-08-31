@@ -7,5 +7,9 @@
   %body  
     .webcam
       %img(src='/images/webcam')
-    %img.graph(src='/images/temp/daily')
-    %img.graph(src='/images/hum/daily')
+    .daily
+      %img.graph(src='/images/temp/daily')
+      %img.graph(src='/images/hum/daily')
+    .weekly
+      %img.graph(src='/images/temp/week')
+      %img.graph(src='/images/hum/week')
