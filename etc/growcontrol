@@ -16,13 +16,13 @@ SCRIPT_NAME="/etc/init.d/growcontrol"
 
 case "$1" in
   start)
-  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON start"
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON start && bundle exec unicorn -c ./unicorn.rb -E production -D"
   ;;
   stop)
-  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON stop"
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON stop && cat /srv/growcontrol/tmp/pids/unicorn.pid | xargs kill -QUIT"
   ;;
   restart)
-  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON restart"
+  su -l $USER -c "cd /srv/growcontrol && bundle exec ./bin/$DAEMON restart && cat /srv/growcontrol/tmp/pids/unicorn.pid | xargs kill -QUIT && bundle exec unicorn -c ./unicorn.rb -E production -D"
   ;;
   *)
   echo "Usage: $SCRIPT_NAME {start|stop|restart}" >&2
@@ -31,3 +31,4 @@ case "$1" in
 esac
 
 :
+

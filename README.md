@@ -11,3 +11,9 @@ sudo apt-get install imagemagick ghostscript libmagickwand-dev
 
 ## Starting the webapp
 ```bundle exec unicorn -c /srv/growcontrol/unicorn.rb -E production -D```
+
+
+## Linx
+* http://sleekd.com/general/configuring-nginx-and-unicorn/
+* http://recipes.sinatrarb.com/p/deployment/nginx_proxied_to_unicorn
+
