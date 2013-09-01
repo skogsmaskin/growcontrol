@@ -2,6 +2,23 @@ html body {
   background-color: black;
   color: #eee;
 }
+.container {
+  width: 1284px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+img.webcam {
+  width: 1280px;
+  height: 960px;
+}
 img.graph {
   width: 640px;
+  height: 480px;
+}
+span.value {
+  color: #ffcc00;
+}
+
+span.time {
+  color: #999;
 }

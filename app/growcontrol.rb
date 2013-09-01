@@ -7,13 +7,11 @@ require_relative '../config/environment'
   
 class GrowControlApp < Sinatra::Base
 
-  HTTP_AUTH_TXT ||= 'Please enter your username and password'
-
   register Sinatra::Twitter::Bootstrap::Assets
 
   register Sinatra::Reloader if $config[:environment] == "development"
 
-  use Rack::Auth::Basic, HTTP_AUTH_TXT do |u, p|
+  use Rack::Auth::Basic, $config[:http_auth][:text] do |u, p|
     u == $config[:http_auth][:username]
     p == $config[:http_auth][:password]
   end
@@ -21,17 +19,18 @@ class GrowControlApp < Sinatra::Base
   set :public_folder, File.dirname(__FILE__) + '/assets'
 
   get '/' do
-    haml :index
-  end
-
-  get '/biosphere' do
     @biosphere ||= GrowControl::Biosphere.new
-    haml :biosphere
+    haml :biosphere, :locals => {:biosphere => @biosphere}
   end
 
   get '/images/:kind/:version' do |kind, version|
-    headers "Content-Type" => "image/png"
-    File.read(File.join($config[:image_path], "#{kind}_#{version}.png"))
+    file = File.join($config[:image_path], "#{kind}_#{version}.png")
+    if File.exists?(file)
+      headers "Content-Type" => "image/png"
+      File.read(file)
+    else
+      halt 404, "No such image file"
+    end
   end
 
   get '/images/webcam' do

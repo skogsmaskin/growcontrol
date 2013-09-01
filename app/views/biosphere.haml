@@ -1,15 +1,32 @@
 !!!  
 %html  
   %head  
-    %title Biosphere status
+    %title [GrowControl] Biosphere status
     = bootstrap_assets
     %link(rel="stylesheet" href="css/growcontrol.css")
-  %body  
-    .webcam
-      %img(src='/images/webcam')
-    .daily
-      %img.graph(src='/images/temperatures/day')
-      %img.graph(src='/images/humidities/day')
-    .weekly
-      %img.graph(src='/images/temperatures/week')
-      %img.graph(src='/images/humidities/week')
+  %body
+    .container
+      .row
+        .span3
+          %h4
+            Temperature:
+            %span.value
+              = biosphere.temperature[:value].to_s + " °C"
+        .span3
+          %h4
+            Humidity:
+            %span.value
+              = biosphere.humidity[:value].to_s + "%"
+        %h4.text-right
+          %span.time
+            Updated
+            = (Time.now - biosphere.humidity[:time]).round
+            seconds ago
+      .webcam
+        %img.webcam(src="/images/webcam?#{Time.now.to_i}")
+      .daily
+        %img.graph(src='/images/temperatures/day')
+        %img.graph(src='/images/humidities/day')
+      .weekly
+        %img.graph(src='/images/temperatures/week')
+        %img.graph(src='/images/humidities/week')

@@ -1,5 +1,6 @@
 ---
 :http_auth:
+  :text: "Please enter your username and password"
   :username: perlite
   :password: soil
 
