@@ -1,0 +1,15 @@
+---
+:http_auth:
+  :username: perlite
+  :password: soil
+
+:email_receiver_address: "per.kristian.nordnes@gmail.com"
+:email_sender_address: "Raspberry Pi <per.kristian.nordnes@gmail.com>"
+
+:temperature_lower_limit: 15
+:temperature_upper_limit: 35
+:humidity_lower_limit: 25
+:humidity_upper_limit: 65
+
+:webcam_video_device: "/dev/video0"
+:image_path: "./tmp/images"

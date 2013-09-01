@@ -1,0 +1,15 @@
+!!!  
+%html  
+  %head  
+    %title Biosphere status
+    = bootstrap_assets
+    %link(rel="stylesheet" href="css/growcontrol.css")
+  %body  
+    .webcam
+      %img(src='/images/webcam')
+    .daily
+      %img.graph(src='/images/temperatures/day')
+      %img.graph(src='/images/humidities/day')
+    .weekly
+      %img.graph(src='/images/temperatures/week')
+      %img.graph(src='/images/humidities/week')

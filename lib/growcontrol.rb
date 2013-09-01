@@ -1,3 +1,4 @@
+require_relative './growcontrol/biosphere'
 require_relative './growcontrol/sensor'
 require_relative './growcontrol/temperature'
 require_relative './growcontrol/humidity'

@@ -7,7 +7,6 @@ tmp/
 coverage
 ._.DS_Store
 .DS_Store
-public/*
 db/*
 log/*
 tmp/*

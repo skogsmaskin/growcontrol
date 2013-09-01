@@ -14,11 +14,14 @@ module GrowControl
       @input = V4L2Input.new @video_device
     end
 
-    def save(temporary_file_name, destination_file_name)
+    def save(file_path)
+      Dir.mkdir(file_path) unless File.exists?(file_path)
       image = @input.read
       image = @input.read_usintrgb
-      image.save_ubytergb(temporary_file_name)
-      `mv #{temporary_file_name} #{destination_file_name}`
+      temp_file = File.join(file_path, "_webcam.jpeg")
+      dest_file = File.join(file_path, "webcam.jpeg")
+      image.save_ubytergb(temp_file)
+      `mv #{temp_file} #{dest_file}`
     end
 
     def close

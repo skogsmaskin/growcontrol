@@ -1,4 +1,5 @@
 require 'tellstickr'
+require 'gruff'
 
 module GrowControl
 
@@ -45,7 +46,8 @@ module GrowControl
        @db.filter("time > '#{hour_ago}'").all
     end
 
-    def write_graph(kind, file_name)
+    def write_graph(kind, file_path)
+      Dir.mkdir(file_path) unless File.exists?(file_path)
       g = Gruff::Line.new
       data_title = case table_name
         when "temperatures" then "Temperature"
@@ -70,7 +72,7 @@ module GrowControl
       end
       g.labels = labels
       begin
-        g.write(file_name)
+        g.write(File.join(file_path, "#{table_name}_#{kind}.png"))
       rescue Exception => e
         LOGGER.error(e)
         LOGGER.error("Data is: #{data.inspect}")
