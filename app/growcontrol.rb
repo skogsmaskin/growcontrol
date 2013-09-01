@@ -11,7 +11,7 @@ class GrowControlApp < Sinatra::Base
 
   register Sinatra::Twitter::Bootstrap::Assets
 
-  register Sinatra::Reloader
+  register Sinatra::Reloader if $config[:environment] == "development"
 
   use Rack::Auth::Basic, HTTP_AUTH_TXT do |u, p|
     u == $config[:http_auth][:username]

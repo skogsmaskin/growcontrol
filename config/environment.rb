@@ -20,3 +20,6 @@ LOGGER.level = Logger::INFO
 
 # SQLite database accessor
 DB = Sequel.sqlite("./db/GrowControl.db")
+
+# Write environment variable to config
+$config[:environment] = ENV['RACK_ENV'] || "development"
