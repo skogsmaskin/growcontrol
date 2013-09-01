@@ -7,7 +7,7 @@ module GrowControl
 
     include Hornetseye
 
-    attr_reader :video_device
+    attr_reader :video_device, :input
 
     def initialize(video_device)
       @video_device = video_device
@@ -21,7 +21,7 @@ module GrowControl
       temp_file = File.join(file_path, "_webcam.jpeg")
       dest_file = File.join(file_path, "webcam.jpeg")
       image.save_ubytergb(temp_file)
-      `mv #{temp_file} #{dest_file}`
+      File.rename(temp_file, dest_file)
     end
 
     def close
