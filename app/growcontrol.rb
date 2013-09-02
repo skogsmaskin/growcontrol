@@ -2,6 +2,9 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sinatra/twitter-bootstrap'
 require 'haml'
+require 'eventmachine'
+require 'json'
+
 require_relative '../config/environment'
 
   
@@ -36,6 +39,20 @@ class GrowControlApp < Sinatra::Base
   get '/images/webcam' do
     headers "Content-Type" => "image/jpeg"
     File.read(File.join($config[:image_path], "webcam.jpeg"))
+  end
+
+  get '/feed' do
+    headers "Content-Type" => "text/event-stream"
+    @biosphere ||= GrowControl::Biosphere.new
+    stream(:keep_open) do |out|
+      @biosphere.feeder.start
+      out << "data: " << {action: "start", time: Time.now}.to_json << "\n\n"
+      EM.add_timer($config[:feed_for_seconds]) do
+        @biosphere.feeder.stop
+        out << "data: " << {action: "stop", time: Time.now}.to_json << "\n\n"
+        out.close
+      end
+    end
   end
 
 end

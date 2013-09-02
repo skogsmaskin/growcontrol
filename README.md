@@ -17,9 +17,9 @@ sudo apt-get install imagemagick ghostscript libmagickwand-dev
 
 ```bundle install```
 
-## Starting the webapp
+## Development
 
-```bundle exec unicorn -c /srv/growcontrol/unicorn.rb -E development -D```
+```RACK_ENV=development bundle exec rackup -s thin```
 
 ## Links
 

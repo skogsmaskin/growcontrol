@@ -10,7 +10,8 @@ module GrowControl
 
     attr :reader,
       :temperature_sensor,
-      :humidity_sensor
+      :humidity_sensor,
+      :feeder
 
     def initialize
 
@@ -22,7 +23,7 @@ module GrowControl
 
       @temperature_sensor = Temperature.new
       @humidity_sensor = Humidity.new
-
+      @feeder = Feeder.new
     end
 
     def temperature

@@ -26,7 +26,7 @@ module GrowControl
       img = ImageList.new(temp_file)
       txt = Draw.new
       img.annotate(txt, 0,0,0,0, Time.now.to_s) do
-        txt.gravity = Magick::SouthEastGravity
+        txt.gravity = Magick::SouthGravity
         self.pointsize = 30
         self.font_family = 'Arial'
         self.font_weight = BoldWeight

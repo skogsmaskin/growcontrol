@@ -1,0 +1,10 @@
+ #!/bin/bash
+tdtool --on 1
+#seconds=52
+seconds=10
+for ((i=1; i <= $seconds ; i++)); do
+	let percent=100*$i/$seconds
+        echo -ne "\tFeeding: $percent %\r"
+	sleep 1
+done
+tdtool --off 1
