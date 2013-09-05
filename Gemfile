@@ -16,7 +16,6 @@ gem 'sinatra-contrib'
 gem 'rack-contrib', :git => 'git://github.com/rack/rack-contrib.git'
 gem 'haml'
 gem 'sinatra-twitter-bootstrap', :require => 'sinatra/twitter-bootstrap'
-gem 'unicorn'
 
 group :development do
   gem 'thin'

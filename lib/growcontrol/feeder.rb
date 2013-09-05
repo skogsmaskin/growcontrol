@@ -7,7 +7,7 @@ module GrowControl
     attr_reader :device
 
     def initialize
-      @device = TellStickR::Device.discover.first
+      @device = TellStickR::Device.new(*$config[:feeding_device])
     end
 
     def start

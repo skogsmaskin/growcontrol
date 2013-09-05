@@ -13,5 +13,7 @@
 :humidity_upper_limit: 65
 
 :webcam_video_device: "/dev/video0"
-:image_path: "./tmp/images"
-:feed_for_seconds: 10
+:image_path: "/srv/growcontrol/tmp/images"
+:feed_for_seconds: 52
+
+:feeding_device: [1, "Vanning", "arctech", "selflearning-switch:nexa"]

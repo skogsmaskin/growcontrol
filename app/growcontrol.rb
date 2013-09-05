@@ -4,15 +4,19 @@ require 'sinatra/twitter-bootstrap'
 require 'haml'
 require 'eventmachine'
 require 'json'
+require 'logger'
 
 require_relative '../config/environment'
-
   
 class GrowControlApp < Sinatra::Base
 
   register Sinatra::Twitter::Bootstrap::Assets
 
   register Sinatra::Reloader if $config[:environment] == "development"
+
+  before do
+    env['rack.logger'] = WEB_LOGGER
+  end
 
   use Rack::Auth::Basic, $config[:http_auth][:text] do |u, p|
     u == $config[:http_auth][:username]
@@ -46,10 +50,10 @@ class GrowControlApp < Sinatra::Base
     @biosphere ||= GrowControl::Biosphere.new
     stream(:keep_open) do |out|
       @biosphere.feeder.start
-      out << "data: " << {action: "start", time: Time.now}.to_json << "\n\n"
+      out << "data: " << {action: "start", time: Time.now, seconds: $config[:feed_for_seconds]}.to_json << "\n\n"
       EM.add_timer($config[:feed_for_seconds]) do
-        @biosphere.feeder.stop
-        out << "data: " << {action: "stop", time: Time.now}.to_json << "\n\n"
+       	@biosphere.feeder.stop
+        out << "data: " << {action: "stop", time: Time.now, seconds: $config[:feed_for_seconds]}.to_json << "\n\n"
         out.close
       end
     end

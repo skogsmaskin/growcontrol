@@ -26,10 +26,10 @@
             = (Time.now - biosphere.humidity[:time]).round
             seconds ago
       .controls
-        .span4
+        .span2
           %button.btn.btn-success.btn-large(id='feed-button')
             Feed
-        .span6.feed-status
+        .span4.feed-status
       .webcam
         %img.webcam(src="/images/webcam?#{Time.now.to_i}")
       .daily
